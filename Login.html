@@ -1,0 +1,367 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        form {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+        }
+    </style>  
+    </style>
+</head>
+<body>
+     <header>
+        <h1>My Website</h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="Login.html">Login</a></li>
+                <li><a href="Records.html">Records</a></li>
+            </ul>
+        </nav>
+    </header>
+    <form id="loginForm">
+        <div class="form-group">
+        <h3>Login</h3>
+        <label for="user">user</label>
+        <input type="text" id="user" required><br><br>
+        </div>
+        <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required><br><br>
+        </div>
+        <div class="form-group">
+        <label for="role">Login as</label>
+        <Select id="role" name="role">
+            <option value="user">Employee</option>
+            <option value="admin">Admin</option>
+            </Select>
+            </div>
+        <button class="Records.html" onclick="Records_html">Submit</button>
+    </form>
+    
+    <script>
+        const validCredentials={
+            admin:{user:"admin1" ,password:"adminpass"},
+            employee:{user:"mpl1", password:"mplpass"}
+        };
+         document.getElementByID("loginForm").addEventListener("submit", function(event) {
+         event.preventDefault();
+         const selectedRole=document.getElementById("role").value;
+         const userInput=document.getElementById("user").value;
+         const passwordInput=document.getElementById("password").value;
+         const errorElement=document.getElementById("errorMessage");
+        
+         const roleCreds=validCredentials[selectedRole];
+
+         if (userInput === roleCreds.user && passwordInput===roleCreds.password) {
+             sessionStorage.setItem("userRole",selectedRole);
+             window.location.href="Records.html";
+         }
+         else{
+             erroeElement.textContent='Incorrect username or password for ${selectedRole}.';
+         }
+         }) ;
+      
+    </script>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        form {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-top: 15px;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8d7da;
+            border-radius: 4px;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        h3 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        .success-message {
+            color: #28a745;
+            margin-top: 15px;
+            text-align: center;
+            padding: 10px;
+            background-color: #d4edda;
+            border-radius: 4px;
+            display: none;
+        }
+        .success-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Website</h1>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="Login.html">Login</a></li>
+                <li><a href="Records.html">Records</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <form id="loginForm">
+        <h3> Login</h3>
+        
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter username" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter password" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="role">Login as</label>
+            <select id="role" name="role">
+                <option value="employee">Employee</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        
+        <button type="submit">Login</button>
+        
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+    </form>
+
+    <script>
+        // Valid credentials
+        const validCredentials = {
+            admin: { username: "admin1", password: "adminpass" },
+            employee: { username: "mpl1", password: "mplpass" }
+        };
+
+        // Get form elements
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const roleSelect = document.getElementById('role');
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
+
+        // Add submit event listener
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // IMPORTANT: Prevents page refresh
+            
+            // Clear previous messages
+            errorElement.classList.remove('show');
+            successElement.classList.remove('show');
+            errorElement.textContent = '';
+            successElement.textContent = '';
+
+            // Get input values and trim whitespace
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const selectedRole = roleSelect.value;
+
+            // Validate inputs are not empty
+            if (!username || !password) {
+                errorElement.textContent = 'Please enter both username and password.';
+                errorElement.classList.add('show');
+                return;
+            }
+
+            // Get credentials for selected role
+            const roleCreds = validCredentials[selectedRole];
+            
+            // Check if credentials match
+            if (username === roleCreds.username && password === roleCreds.password) {
+                // Success - store role in sessionStorage
+                sessionStorage.setItem('userRole', selectedRole);
+                
+                // Show success message
+                successElement.textContent = ' Login successful! Redirecting...';
+                successElement.classList.add('show');
+                
+                // Redirect to Records page after short delay
+                setTimeout(function() {
+                    window.location.href = 'Records.html';
+                }, 1000);
+                
+            } else {
+                // Failed login
+                errorElement.textContent = ` Incorrect username or password for ${selectedRole}.`;
+                errorElement.classList.add('show');
+                
+                // Clear password field for security
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        // Optional: Add enter key support (already handled by form submit)
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const userRole = sessionStorage.getItem('userRole');
+            if (userRole) {
+                // If already logged in, redirect to records
+                window.location.href = 'Records.html';
+            }
+        });
+    </script>
+</body>
+</html>
