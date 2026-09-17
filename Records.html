@@ -216,6 +216,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 10px;
         }
 
         header h1 {
@@ -282,7 +283,7 @@
         }
 
         .welcome-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #007bff 100%);
             color: white;
             padding: 30px;
             border-radius: 10px;
@@ -661,25 +662,80 @@
                     </select>
                 </div>
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal('recordModal')">Cancel</button>
                     <button type="submit" class="btn-save">Save Record</button>
                 </div>
             </form>
         </div>
     </div>
+    <!--  REJECT REASON MODAL  -->
+    <div id="rejectModal" class="modal">
+        <div class="modal-content">
+            <h3>Reject Leave Request</h3>
+            <form id="rejectForm">
+                <input type="hidden" id="rejectRecordId">
+                <div class="form-group">
+                    <label for="rejectReason">Reason for Rejection <span style="color:#dc3545;">*</span></label>
+                    <textarea id="rejectReason" placeholder="Explain to the employee why their leave request is being rejected..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('rejectModal')">Cancel</button>
+                    <button type="submit" class="btn-reject-confirm">Reject Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- ============ ACCEPT NOTE MODAL ============ -->
+    <div id="acceptModal" class="modal">
+        <div class="modal-content">
+            <h3>Accept Leave Request</h3>
+            <form id="acceptForm">
+                <input type="hidden" id="acceptRecordId">
+                <div class="form-group">
+                    <label for="acceptNote">Optional Note to Employee</label>
+                    <textarea id="acceptNote" placeholder="e.g., Enjoy your time off! (optional)"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('acceptModal')">Cancel</button>
+                    <button type="submit" class="btn-accept-confirm">Accept Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <script>
+
+    <!--<script>
         // Sample records data
         let records = [
-            { id: 1, name: 'Sam Vidambu', email: 'sam@yahoo.com', department: 'IT', status: 'Active' },
-            { id: 2, name: 'James Ayiro', email: 'james@gmail.com', department: 'HR', status: 'Active' },
-            { id: 3, name: 'Johnston Kombamwiko', email: 'komba@yahoo.com', department: 'Finance', status: 'Inactive' },
-            { id: 4, name: 'Melody Brownne', email: 'melody@gmail.com', department: 'Marketing', status: 'Pending' }
+            { id: 1, name: 'Sam Vidambu', email: 'sam@yahoo.com', department: 'IT', status: 'Active',leaveRequest: {
+                    type: 'Annual Leave',
+                    startDate: '2026-02-10',
+                    endDate: '2026-02-14',
+                    reason: 'Family vacation planned months ago.',
+                    status: 'Pending',       // Pending | Approved | Rejected
+                    adminReason: ''          // Populated when admin accepts/rejects
+                } },
+            { id: 2, name: 'James Ayiro', email: 'james@gmail.com', department: 'HR', status: 'Active',leaveRequest: {
+                    type: 'Sick Leave',
+                    startDate: '2026-01-20',
+                    endDate: '2026-01-22',
+                    reason: 'Down with flu, doctor advised rest.',
+                    status: 'Approved',
+                    adminReason: 'Approved. Get well soon!'
+                }},
+            { id: 3, name: 'Johnston Kombamwiko', email: 'komba@yahoo.com', department: 'Finance', status: 'Inactive',leaveRequest: {
+                    type: 'Personal Leave',
+                    startDate: '2026-03-01',
+                    endDate: '2026-03-03',
+                    reason: 'Attending a family event out of town.',
+                    status: 'Rejected',
+                    adminReason: 'Too many employees on leave that week. Please reschedule.'
+                } },
+            { id: 4, name: 'Melody Brownne', email: 'melody@gmail.com', department: 'Marketing', status: 'Pending',leaveRequest: null}
         ];
 
         let nextId = 5;
         let currentUserRole = 'employee';
-        let editingId = null;
 
         // Check login status and role
         function checkLogin() {
@@ -875,6 +931,369 @@
             checkLogin();
             renderRecords();
         });
-    </script>
+    </script> -->
+    <script>
+    const API_URL = window.location.protocol === 'file:'
+        ? 'http://localhost/Record%20management%20app/api'
+        : 'api';
+    const token = sessionStorage.getItem('authToken');
+    let currentUserRole = 'employee';
+    let records = [];
+
+    // API HELPER
+    async function api(endpoint, options = {}) {
+        const res = await fetch(`${API_URL}/${endpoint}`, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            }
+        });
+        const data = await res.json();
+        if (!res.ok && !data.success) throw new Error(data.message || 'Request failed');
+        return data;
+    }
+
+    // AUTH CHECK
+    function checkLogin() {
+        if (!token) {
+            window.location.href = 'Login.html';
+            return;
+        }
+        currentUserRole = sessionStorage.getItem('userRole') || 'employee';
+        const displayName = sessionStorage.getItem('userName') || (currentUserRole=== 'admin' ? 'Admin' : 'Employee');
+        document.getElementById('userDisplay').textContent = displayName;
+        document.getElementById('roleDisplay').textContent = `(Logged in as ${displayName})`;
+        if (currentUserRole === 'admin') {
+            document.getElementById('adminSection').style.display = 'block';
+        }
+    }
+    // LOAD RECORDS
+    async function loadRecords() {
+        try {
+            const data = await api('records.php');
+            records = data.records.map(r=>({...r,id:Number(r.id)}));
+            renderRecords();
+        } catch (err) {
+            alert('Failed to load records: ' + err.message);
+        }
+    }
+    // RENDER TABLE
+    function renderRecords() {
+        const tbody = document.getElementById('recordsTableBody');
+        if (!records.length) {
+            tbody.innerHTML = `<tr><td colspan="7"><div class="no-records"><p>No records found.</p></div></td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = records.map(record => {
+            let leaveCellContent = '';
+
+            if (record.leaveRequest) {
+                const lr = record.leaveRequest;
+                const statusClass = `leave-${lr.status.toLowerCase()}`;
+                const statusLabel = lr.status.toUpperCase();
+
+                let reasonNote = '';
+                if (lr.adminReason && lr.status === 'Rejected') {
+                    reasonNote = `<div class="leave-reason-note rejection"><strong>Reason:</strong> ${lr.adminReason}</div>`;
+                } else if (lr.adminReason && lr.status === 'Approved') {
+                    reasonNote = `<div class="leave-reason-note approval"><strong>Note:</strong> ${lr.adminReason}</div>`;
+                }
+
+                leaveCellContent = `
+                    <span class="leave-type-display">${lr.type}</span>
+                    <span class="leave-dates">${lr.startDate} → ${lr.endDate}</span>
+                    <span class="leave-badge ${statusClass}">${statusLabel}</span>
+                    ${reasonNote}
+                `;
+            } else if (currentUserRole === 'employee') {
+                leaveCellContent = `
+                    <select class="table-dropdown" id="leaveType-${record.id}">
+                        <option value="">-- Select Leave --</option>
+                        <option value="Sick Leave">Sick Leave</option>
+                        <option value="Maternity Leave">Maternity Leave</option>
+                        <option value="Paternity Leave">Paternity Leave</option>
+                        <option value="Annual Leave">Annual Leave</option>
+                        <option value="Personal Leave">Personal Leave</option>
+                    </select>
+                    <button class="btn-submit-leave" style="margin-top:6px;width:100%;"
+                        onclick="submitLeaveRequest(${record.id})">Submit Request</button>
+                `;
+            } else {
+                leaveCellContent = `<span class="leave-badge leave-none">No leave requested</span>`;
+            }
+
+            let actionButtons = `<button class="btn-view" onclick="viewRecord(${record.id})">View</button>`;
+            if (currentUserRole === 'admin') {
+                actionButtons += `
+                    <button class="btn-edit" onclick="editRecord(${record.id})">Edit</button>
+                    <button class="btn-delete" onclick="deleteRecord(${record.id})">Delete</button>
+                `;
+                if (record.leaveRequest && record.leaveRequest.status === 'Pending') {
+                    actionButtons += `
+                        <button class="btn-accept" onclick="acceptLeave(${record.id})">Accept</button>
+                        <button class="btn-reject" onclick="rejectLeave(${record.id})">Reject</button>
+                    `;
+                }
+            }
+
+            return `
+                <tr>
+                    <td>${record.id}</td>
+                    <td><strong>${record.name}</strong></td>
+                    <td>${record.email}</td>
+                    <td>${record.department}</td>
+                    <td><span class="status-badge status-${record.status.toLowerCase()}">${record.status}</span></td>
+                    <td class="leave-cell">${leaveCellContent}</td>
+                    <td><div class="action-buttons">${actionButtons}</div></td>
+                </tr>
+            `;
+        }).join('');
+    }
+    // EMPLOYEE: SUBMIT LEAVE
+    async function submitLeaveRequest(recordId) {
+        const dropdown = document.getElementById(`leaveType-${recordId}`);
+        const leaveType = dropdown.value;
+        if (!leaveType) return alert('Select a leave type first.');
+
+        const startDate = prompt('Start date (YYYY-MM-DD):', new Date().toISOString().split('T')[0]);
+        if (!startDate) return;
+
+        const endDate = prompt('End date (YYYY-MM-DD):', startDate);
+        if (!endDate) return;
+
+        const reason = prompt('Reason for leave:');
+        if (!reason) return;
+
+        try {
+            await api('leave_submit.php', {
+                method: 'POST',
+                body: JSON.stringify({ recordId, type: leaveType, startDate, endDate, reason })
+            });
+            alert(' Leave submitted! Status: PENDING');
+            loadRecords();
+        } catch (err) {
+            alert(' ' + err.message);
+        }
+    }
+    // ADMIN: ACCEPT
+    async function acceptLeave(recordId) {
+        const note = prompt('Optional note for approval:', 'Approved.');
+        try {
+            await api('leave_accept.php', {
+                method: 'POST',
+                body: JSON.stringify({ recordId, note })
+            });
+            alert(' Leave approved.');
+            loadRecords();
+        } catch (err) {
+            alert(' ' + err.message);
+        }
+    }
+    // ADMIN: REJECT
+    async function rejectLeave(recordId) {
+        const reason = prompt('Reason for rejection (required):');
+        if (!reason || !reason.trim()) return alert('Reason is required.');
+        try {
+            await api('leave_reject.php', {
+                method: 'POST',
+                body: JSON.stringify({ recordId, reason })
+            });
+            alert(' Leave rejected.');
+            loadRecords();
+        } catch (err) {
+            alert(' ' + err.message);
+        }
+    }
+
+    
+    // CRUD
+    async function addRecord(name, email, department, status) {
+        await api('add_record.php', {
+            method: 'POST',
+            body: JSON.stringify({ name, email, department, status })
+        });
+        loadRecords();
+    }
+
+    async function updateRecord(id, updates) {
+        await api('edit_record.php', {
+            method: 'POST',
+            body: JSON.stringify({ id, ...updates })
+        });
+        loadRecords();
+    }
+
+    async function deleteRecord(id) {
+        if (!confirm('Delete this record?')) return;
+        await api('delete_record.php', {
+            method: 'POST',
+            body: JSON.stringify({ id })
+        });
+        loadRecords();
+    }
+
+    function viewRecord(id) {
+        const r = records.find(x => x.id === id);
+        if (r) alert(`Name: ${r.name}\nEmail: ${r.email}\nDept: ${r.department}\nStatus: ${r.status}`);
+    }
+    // LOGOUT
+    function logout() {
+        if (!confirm('Logout?')) return;
+        sessionStorage.clear();
+        window.location.href = 'Login.html';
+    }
+     //MODAL HELPERS
+function openAddModal() {
+    if (currentUserRole !== 'admin') {
+        alert('Only administrators can add records.');
+        return;
+    }
+    document.getElementById('modalTitle').textContent = 'Add New Record';
+    document.getElementById('recordForm').reset();
+    document.getElementById('recordId').value = '';
+    document.getElementById('recordModal').style.display = 'block';
+}
+
+function editRecord(id) {
+    if (currentUserRole !== 'admin') {
+        alert('Only administrators can edit records.');
+        return;
+    }
+    const record = records.find(r => (r.id) === (id));
+    if (!record) return;
+
+    document.getElementById('modalTitle').textContent = 'Edit Record';
+    document.getElementById('recordId').value = record.id;
+    document.getElementById('recordName').value = record.name;
+    document.getElementById('recordEmail').value = record.email;
+    document.getElementById('recordDepartment').value = record.department;
+    document.getElementById('recordStatus').value = record.status;
+    document.getElementById('recordModal').style.display = 'block';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    ['recordModal', 'rejectModal', 'acceptModal'].forEach(id => {
+        const modal = document.getElementById(id);
+        if (modal && event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+
+// RECORD FORM SUBMIT — handles add AND edit
+document.getElementById('recordForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const id         = document.getElementById('recordId').value;
+    const name       = document.getElementById('recordName').value.trim();
+    const email      = document.getElementById('recordEmail').value.trim();
+    const department = document.getElementById('recordDepartment').value.trim();
+    const status     = document.getElementById('recordStatus').value;
+
+    if (!name || !email || !department) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    try {
+        if (id) {
+            //  EDIT
+            await api('edit_record.php', {
+                method: 'POST',
+                body: JSON.stringify({ id: parseInt(id), name, email, department, status })
+            });
+            alert('✅ Record updated successfully!');
+        } else {
+            //  ADD
+            const result = await api('add_record.php', {
+                method: 'POST',
+                body: JSON.stringify({ name, email, department, status })
+            });
+            alert('✅ Record added successfully! (ID: ' + result.id + ')');
+        }
+        closeModal('recordModal');
+        await loadRecords();
+    } catch (err) {
+        alert(' ' + err.message);
+    }
+});
+
+// REJECT MODAL
+function rejectLeave(recordId) {
+    if (currentUserRole !== 'admin') {
+        alert('Only administrators can reject leave requests.');
+        return;
+    }
+    document.getElementById('rejectRecordId').value = recordId;
+    document.getElementById('rejectReason').value = '';
+    document.getElementById('rejectModal').style.display = 'block';
+}
+
+document.getElementById('rejectForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const recordId = parseInt(document.getElementById('rejectRecordId').value);
+    const reason   = document.getElementById('rejectReason').value.trim();
+
+    if (!reason) {
+        alert('Please provide a reason for rejection.');
+        return;
+    }
+
+    try {
+        await api('leave_reject.php', {
+            method: 'POST',
+            body: JSON.stringify({ recordId, reason })
+        });
+        closeModal('rejectModal');
+        alert(' Leave rejected.');
+        await loadRecords();
+    } catch (err) {
+        alert(' ' + err.message);
+    }
+});
+
+// ACCEPT MODAL
+function acceptLeave(recordId) {
+    if (currentUserRole !== 'admin') {
+        alert('Only administrators can accept leave requests.');
+        return;
+    }
+    document.getElementById('acceptRecordId').value = recordId;
+    document.getElementById('acceptNote').value = '';
+    document.getElementById('acceptModal').style.display = 'block';
+}
+
+document.getElementById('acceptForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const recordId = parseInt(document.getElementById('acceptRecordId').value);
+    const note     = document.getElementById('acceptNote').value.trim();
+
+    try {
+        await api('leave_accept.php', {
+            method: 'POST',
+            body: JSON.stringify({ recordId, note })
+        });
+        closeModal('acceptModal');
+        alert(' Leave approved.');
+        await loadRecords();
+    } catch (err) {
+        alert(' ' + err.message);
+    }
+});
+    // INIT
+    window.addEventListener('load', () => {
+        checkLogin();
+        loadRecords();
+    });
+</script>
 </body>
 </html>

@@ -287,81 +287,76 @@
         <div id="errorMessage" class="error-message"></div>
         <div id="successMessage" class="success-message"></div>
     </form>
-
     <script>
-        // Valid credentials
-        const validCredentials = {
-            admin: { username: "admin1", password: "adminpass" },
-            employee: { username: "mpl1", password: "mplpass" }
-        };
+    // No http://localhost:3000 needed — same origin!
+    const API_URL = window.location.protocol === 'file:'
+        ? 'http://localhost/Record%20management%20app/api'
+        : 'api';
 
-        // Get form elements
-        const loginForm = document.getElementById('loginForm');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const roleSelect = document.getElementById('role');
-        const errorElement = document.getElementById('errorMessage');
-        const successElement = document.getElementById('successMessage');
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const roleSelect = document.getElementById('role');
+    const errorElement = document.getElementById('errorMessage');
+    const successElement = document.getElementById('successMessage');
 
-        // Add submit event listener
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // IMPORTANT: Prevents page refresh
-            
-            // Clear previous messages
-            errorElement.classList.remove('show');
-            successElement.classList.remove('show');
-            errorElement.textContent = '';
-            successElement.textContent = '';
+    // If already logged in, redirect
+    window.addEventListener('load', function() {
+        if (sessionStorage.getItem('userRole')) {
+            window.location.href = 'Records.html';
+            return;
+        }
+        const preselectedRole = sessionStorage.getItem('preselectedRole');
+        if (preselectedRole) {
+            roleSelect.value = preselectedRole;
+            sessionStorage.removeItem('preselectedRole');
+        }
+    });
 
-            // Get input values and trim whitespace
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
-            const selectedRole = roleSelect.value;
+    loginForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        errorElement.classList.remove('show');
+        successElement.classList.remove('show');
 
-            // Validate inputs are not empty
-            if (!username || !password) {
-                errorElement.textContent = 'Please enter both username and password.';
-                errorElement.classList.add('show');
-                return;
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        const role = roleSelect.value;
+
+        if (!username || !password) {
+            errorElement.textContent = 'Please enter both username and password.';
+            errorElement.classList.add('show');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/login.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, role })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Login failed');
             }
 
-            // Get credentials for selected role
-            const roleCreds = validCredentials[selectedRole];
-            
-            // Check if credentials match
-            if (username === roleCreds.username && password === roleCreds.password) {
-                // Success - store role in sessionStorage
-                sessionStorage.setItem('userRole', selectedRole);
-                
-                // Show success message
-                successElement.textContent = ' Login successful! Redirecting...';
-                successElement.classList.add('show');
-                
-                // Redirect to Records page after short delay
-                setTimeout(function() {
-                    window.location.href = 'Records.html';
-                }, 1000);
-                
-            } else {
-                // Failed login
-                errorElement.textContent = ` Incorrect username or password for ${selectedRole}.`;
-                errorElement.classList.add('show');
-                
-                // Clear password field for security
-                passwordInput.value = '';
-                passwordInput.focus();
-            }
-        });
+            sessionStorage.setItem('authToken', data.token);
+            sessionStorage.setItem('userRole', data.role);
+            sessionStorage.setItem('userName', data.name);
+            sessionStorage.setItem('userId', data.userId);
 
-        // Optional: Add enter key support (already handled by form submit)
-        // Check if user is already logged in
-        window.addEventListener('load', function() {
-            const userRole = sessionStorage.getItem('userRole');
-            if (userRole) {
-                // If already logged in, redirect to records
-                window.location.href = 'Records.html';
-            }
-        });
-    </script>
+            successElement.textContent = 'Login successful! Redirecting...';
+            successElement.classList.add('show');
+
+            setTimeout(() => window.location.href = 'Records.html', 800);
+
+        } catch (err) {
+            errorElement.textContent = ` ${err.message}`;
+            errorElement.classList.add('show');
+            passwordInput.value = '';
+        }
+    });
+</script>
 </body>
 </html>
