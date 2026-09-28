@@ -1,6 +1,11 @@
 <?php
 // api/leave_accept.php
 require 'db.php';
+if (($_SESSION['user_role'] ?? '') !== 'admin') {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Administrator access required']);
+    exit;
+}
 
 $data = json_decode(file_get_contents('php://input'), true);
 $recordId = intval($data['recordId'] ?? 0);

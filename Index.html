@@ -19,9 +19,8 @@
             flex-direction: column;
             color: #333;
         }
-        /* ============================================
-           NAVBAR — matches the Login page styling
-           ============================================ */
+        
+           /*NAVBAR — matches the Login page styling*/
         header {
             background-color: #333;
             color: white;
@@ -56,9 +55,7 @@
             text-decoration: none;
         }
 
-        /* ============================================
-           PAGE CONTENT
-           ============================================ */
+        /* PAGE CONTENT*/
         .page-content {
             flex: 1;
             display: flex;
@@ -67,7 +64,7 @@
             align-items: center;
             padding: 40px 20px;
         }
-                .page-header {
+        .page-header {
             text-align: center;
             color: white;
             margin-bottom: 40px;
@@ -95,9 +92,7 @@
             object-fit: cover;
         }
 
-        /* ============================================
-           ROLE BUTTONS
-           ============================================ */
+        /* ROLE BUTTONS*/
         .role-container {
             display: flex;
             gap: 30px;
@@ -158,9 +153,7 @@
             display: block;
         }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
+        /* RESPONSIVE*/
           @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -204,7 +197,7 @@
     <img src="work.jpg" style="height:500px;">
     </div>
         <div class="role-container">
-            <button class="role-btn admin-btn" onclick="goToLogin('admin')">
+            <button class="role-btn admin-btn" onclick="goToLogin('department-admin')">
             <h3>ADMIN</h3>
             <h4>Get to alter records of existing employees and add records of new employees as they join the establishment.</h4>
             <button class="role-btn employee-btn" onclick="goToLogin('employee')">

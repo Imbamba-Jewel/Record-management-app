@@ -1,6 +1,11 @@
 <?php
 // api/delete_record.php
 require 'db.php';
+if (($_SESSION['user_role'] ?? '') !== 'admin') {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Administrator access required']);
+    exit;
+}
 
 $data = json_decode(file_get_contents('php://input'), true);
 $id = intval($data['id'] ?? 0);

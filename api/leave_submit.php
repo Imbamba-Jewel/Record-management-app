@@ -2,6 +2,14 @@
 // api/leave_submit.php
 require 'db.php';
 
+$sessionRole = $_SESSION['user_role'] ?? '';
+$sessionUserId = (int) ($_SESSION['user_id'] ?? 0);
+if ($sessionRole === '' || $sessionUserId < 1) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'You must log in first']);
+    exit;
+}
+
 $data = json_decode(file_get_contents('php://input'), true);
 $recordId  = intval($data['recordId'] ?? 0);
 $type      = $data['type'] ?? '';
@@ -11,6 +19,12 @@ $reason    = $data['reason'] ?? '';
 
 if (!$recordId || !$type || !$startDate || !$endDate || !$reason) {
     echo json_encode(['success' => false, 'message' => 'Missing fields']);
+    exit;
+}
+
+if ($sessionRole !== 'admin' && $recordId !== $sessionUserId) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'You can only submit leave for your own record']);
     exit;
 }
 

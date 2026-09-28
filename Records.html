@@ -1,193 +1,3 @@
-<!--
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Contacts</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<style>
-    table,th,td{
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-</style>
-<body>
-     <header>
-        <h1>My Website</h1>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="Index.html">Home</a></li>
-                <li><a href="Login.html">Login</a></li>
-                <li><a href="Records.html">Records</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div id="recordsSection" style="display: none;">
-            <p>Status:logged in as <strong id="userRoleDisplay"></strong></p>
-    <table style="height:100%; width: 100%;">
-        <tr style="width: 20%;">
-            <td>Firstname</td>
-            <td>Middlename</td>
-            <td>LastName</td>
-            <td>ID</td>
-            <td>Department</td>     
-            <td>Leave request</td>
-            <td>Email</td>
-            <td>Phone</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="IT">IT</option>
-                    <option value="Marketting">Marketting</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Engineering">Engineering</option>
-                </select>
-            </td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="Sickleave">Sick leave</option>
-                    <option value="Maternity">Maternity leave</option>
-                    <option value="Paternity">Paternity leave</option>
-                    <option value="Annual">Annual leave</option>
-                    <option value="Personal">Personal leave</option>
-                </select>
-                <button class="action-btn submit-mode" onclick="submitLeaveRow('row-101')">Submit Request</button>
-            </td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="IT">IT</option>
-                    <option value="Marketting">Marketting</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Engineering">Engineering</option>
-                </select>
-            </td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="Sickleave">Sick leave</option>
-                    <option value="Maternity">Maternity leave</option>
-                    <option value="Paternity">Paternity leave</option>
-                    <option value="Annual">Annual leave</option>
-                    <option value="Personal">Personal leave</option>
-                </select>
-                <button class="action-btn submit-mode" onclick="submitLeaveRow('row-101')">Submit Request</button>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="IT">IT</option>
-                    <option value="Marketting">Marketting</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Engineering">Engineering</option>
-                </select>
-            </td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="Sickleave">Sick leave</option>
-                    <option value="Maternity">Maternity leave</option>
-                    <option value="Paternity">Paternity leave</option>
-                    <option value="Annual">Annual leave</option>
-                    <option value="Personal">Personal leave</option>
-                </select>
-                <button class="action-btn submit-mode" onclick="submitLeaveRow('row-101')">Submit Request</button>
-            </td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="IT">IT</option>
-                    <option value="Marketting">Marketting</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Engineering">Engineering</option>
-                </select>
-            </td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="Sickleave">Sick leave</option>
-                    <option value="Maternity">Maternity leave</option>
-                    <option value="Paternity">Paternity leave</option>
-                    <option value="Annual">Annual leave</option>
-                    <option value="Personal">Personal leave</option>
-                </select>
-                <button class="action-btn submit-mode" onclick="submitLeaveRow('row-101')">Submit Request</button>
-            </td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <select class="table-dropdown">
-                    <option value="IT">IT</option>
-                    <option value="Marketting">Marketting</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Engineering">Engineering</option>
-                </select>
-            </td>
-            <td><select class="table-dropdown">
-                    <option value="Sickleave">Sick leave</option>
-                    <option value="Maternity">Maternity leave</option>
-                    <option value="Paternity">Paternity leave</option>
-                    <option value="Annual">Annual leave</option>
-                    <option value="Personal">Personal leave</option>
-                </select>
-                <button class="action-btn submit-mode" onclick="submitLeaveRow('row-101')">Submit Request</button>
-            </td>
-            <td></td>
-            <td></td>
-        </tr>
-    </table>
-    </div>
-    <script>
-        const currentrole=sessionStorage.getItem("userRole");
-        if(!currentRole){
-            alert("Acess Denied.Please log in first");
-            window.location.href="Login.html";
-        }
-        else{
-            document.getElementById("userRoleDisplay").textContent=currentRole.toUpperCase()
-            if (currentRole ==="admin") {
-                document.getElementbyId("alterBtn").style.display="inline-block";
-            }
-        }
-        document.getElementById("logoutBtn").addEventListener("click", function(){
-            sessionStorage.removeItem("userRole");
-            window.location.href="Login.html";
-        });
-    </script> 
-    </body>
-</html>
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -220,7 +30,7 @@
         }
 
         header h1 {
-            font-size: 24px;
+            font-size: 32px;
         }
 
         .nav-links {
@@ -283,22 +93,19 @@
         }
 
         .welcome-section {
-            background: linear-gradient(135deg, #667eea 0%, #007bff 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            color: #333;
+            padding: 0;
+            margin-bottom: 28px;
         }
 
         .welcome-section h2 {
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 8px;
         }
 
         .welcome-section p {
             font-size: 16px;
-            opacity: 0.9;
+            color: #555;
         }
 
         .records-header {
@@ -333,7 +140,7 @@
         .table-container {
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             overflow-x: auto;
         }
 
@@ -554,6 +361,88 @@
             background-color: #5a6268;
         }
 
+        .dialog-modal {
+            display: none;
+            position: fixed;
+            z-index: 1100;
+            inset: 0;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(18, 24, 32, 0.55);
+        }
+
+        .dialog-modal.is-open {
+            display: flex;
+        }
+
+        .dialog-panel {
+            width: min(100%, 420px);
+            padding: 24px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+            animation: slideDown 0.2s ease-out;
+        }
+
+        .dialog-panel h3 {
+            margin-bottom: 10px;
+            color: #263238;
+        }
+
+        .dialog-message {
+            margin-bottom: 18px;
+            color: #56616b;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        .dialog-input {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 12px;
+            border: 1px solid #cbd2d9;
+            border-radius: 4px;
+            font: inherit;
+        }
+
+        .dialog-input:focus {
+            border-color: #007bff;
+            outline: 2px solid rgba(0, 123, 255, 0.18);
+        }
+
+        .dialog-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .dialog-actions button {
+            width: auto;
+            min-width: 88px;
+            margin: 0;
+            padding: 9px 16px;
+            border: 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .dialog-cancel {
+            background: #e7ebef;
+            color: #303b45;
+        }
+
+        .dialog-confirm {
+            background: #087f5b;
+            color: #fff;
+        }
+
+        .dialog-confirm.is-danger {
+            background: #c0392b;
+        }
+
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -610,7 +499,7 @@
         <div id="adminSection" class="admin-only" style="display: none;">
             <strong> Admin Controls:</strong> You have full access to add, edit, and delete records.
         </div>
-
+<a href="leaveTypes.html">Leave Types</a>
         <div class="records-header">
             <h3>All Records</h3>
             <button class="add-record-btn" onclick="openAddModal()">+ Add New Record</button>
@@ -626,6 +515,7 @@
                         <th>Department</th>
                         <th>Status</th>
                         <th>Actions</th>
+                        <th>Leave Request</th>
                     </tr>
                 </thead>
                 <tbody id="recordsTableBody">
@@ -634,6 +524,11 @@
             </table>
         </div>
     </div>
+    <script>
+        if (window.location.protocol === 'file:') {
+            window.location.replace('http://localhost/Record%20management%20app/Records.html');
+        }
+    </script>
 
     <!-- Add/Edit Modal -->
     <div id="recordModal" class="modal">
@@ -651,7 +546,14 @@
                 </div>
                 <div class="form-group">
                     <label for="recordDepartment">Department</label>
-                    <input type="text" id="recordDepartment" required>
+                    <select id="recordDepartment" required>
+                        <option value="">Select department</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Finance">Finance</option>
+                        <option value="HR">HR</option>
+                        <option value="IT">IT</option>
+                        <option value="Marketing">Marketing</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="recordStatus">Status</label>
@@ -660,6 +562,10 @@
                         <option value="Inactive">Inactive</option>
                         <option value="Pending">Pending</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="recordPassword">Employee Password</label>
+                    <input type="password" id="recordPassword" placeholder="Required for new employees">
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal('recordModal')">Cancel</button>
@@ -702,236 +608,19 @@
             </form>
         </div>
     </div>
-
-
-    <!--<script>
-        // Sample records data
-        let records = [
-            { id: 1, name: 'Sam Vidambu', email: 'sam@yahoo.com', department: 'IT', status: 'Active',leaveRequest: {
-                    type: 'Annual Leave',
-                    startDate: '2026-02-10',
-                    endDate: '2026-02-14',
-                    reason: 'Family vacation planned months ago.',
-                    status: 'Pending',       // Pending | Approved | Rejected
-                    adminReason: ''          // Populated when admin accepts/rejects
-                } },
-            { id: 2, name: 'James Ayiro', email: 'james@gmail.com', department: 'HR', status: 'Active',leaveRequest: {
-                    type: 'Sick Leave',
-                    startDate: '2026-01-20',
-                    endDate: '2026-01-22',
-                    reason: 'Down with flu, doctor advised rest.',
-                    status: 'Approved',
-                    adminReason: 'Approved. Get well soon!'
-                }},
-            { id: 3, name: 'Johnston Kombamwiko', email: 'komba@yahoo.com', department: 'Finance', status: 'Inactive',leaveRequest: {
-                    type: 'Personal Leave',
-                    startDate: '2026-03-01',
-                    endDate: '2026-03-03',
-                    reason: 'Attending a family event out of town.',
-                    status: 'Rejected',
-                    adminReason: 'Too many employees on leave that week. Please reschedule.'
-                } },
-            { id: 4, name: 'Melody Brownne', email: 'melody@gmail.com', department: 'Marketing', status: 'Pending',leaveRequest: null}
-        ];
-
-        let nextId = 5;
-        let currentUserRole = 'employee';
-
-        // Check login status and role
-        function checkLogin() {
-            const role = sessionStorage.getItem('userRole');
-            console.log('Current role from session:', role); // Debug line
-            
-            if (!role) {
-                // Not logged in, redirect to login
-                console.log('No role found, redirecting to login');
-                window.location.href = 'Login.html';
-                return;
-            }
-
-            currentUserRole = role;
-            const displayName = role === 'admin' ? 'Admin' : 'Employee';
-            document.getElementById('userDisplay').textContent = displayName;
-            document.getElementById('roleDisplay').textContent = `(Logged in as ${displayName})`;
-
-            // Show/hide admin controls
-            if (role === 'admin') {
-                document.getElementById('adminSection').style.display = 'block';
-                console.log('Admin controls enabled');
-            } else {
-                console.log('Employee controls enabled');
-            }
-        }
-
-        // Render records table
-        function renderRecords() {
-            const tbody = document.getElementById('recordsTableBody');
-            
-            if (records.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6">
-                            <div class="no-records">
-                                <p> No records found. Click "Add New Record" to create one.</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            tbody.innerHTML = records.map(record => `
-                <tr>
-                    <td>${record.id}</td>
-                    <td><strong>${record.name}</strong></td>
-                    <td>${record.email}</td>
-                    <td>${record.department}</td>
-                    <td>
-                        <span class="status-badge status-${record.status.toLowerCase()}">
-                            ${record.status}
-                        </span>
-                    </td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-view" onclick="viewRecord(${record.id})">View</button>
-                            <button class="btn-edit" onclick="editRecord(${record.id})">Edit</button>
-                            ${currentUserRole === 'admin' ? 
-                                `<button class="btn-delete" onclick="deleteRecord(${record.id})">Delete</button>` : 
-                                ''}
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // View record (alert for demo)
-        function viewRecord(id) {
-            const record = records.find(r => r.id === id);
-            if (record) {
-                alert(`Record Details:\n\nName: ${record.name}\nEmail: ${record.email}\nDepartment: ${record.department}\nStatus: ${record.status}`);
-            }
-        }
-
-        // Open add modal
-        function openAddModal() {
-            if (currentUserRole !== 'admin') {
-                alert('Only administrators can add records.');
-                return;
-            }
-            editingId = null;
-            document.getElementById('modalTitle').textContent = 'Add New Record';
-            document.getElementById('recordForm').reset();
-            document.getElementById('recordId').value = '';
-            document.getElementById('recordModal').style.display = 'block';
-        }
-
-        // Edit record
-        function editRecord(id) {
-            if (currentUserRole !== 'admin') {
-                alert('Only administrators can edit records.');
-                return;
-            }
-
-            const record = records.find(r => r.id === id);
-            if (record) {
-                editingId = id;
-                document.getElementById('modalTitle').textContent = 'Edit Record';
-                document.getElementById('recordId').value = record.id;
-                document.getElementById('recordName').value = record.name;
-                document.getElementById('recordEmail').value = record.email;
-                document.getElementById('recordDepartment').value = record.department;
-                document.getElementById('recordStatus').value = record.status;
-                document.getElementById('recordModal').style.display = 'block';
-            }
-        }
-
-        // Delete record
-        function deleteRecord(id) {
-            if (currentUserRole !== 'admin') {
-                alert('Only administrators can delete records.');
-                return;
-            }
-
-            if (confirm('Are you sure you want to delete this record?')) {
-                records = records.filter(r => r.id !== id);
-                renderRecords();
-                alert('Record deleted successfully!');
-            }
-        }
-
-        // Save record (add or edit)
-        document.getElementById('recordForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('recordName').value.trim();
-            const email = document.getElementById('recordEmail').value.trim();
-            const department = document.getElementById('recordDepartment').value.trim();
-            const status = document.getElementById('recordStatus').value;
-            const id = document.getElementById('recordId').value;
-
-            if (!name || !email || !department) {
-                alert('Please fill in all fields.');
-                return;
-            }
-
-            if (id) {
-                // Edit existing record
-                const recordIndex = records.findIndex(r => r.id === parseInt(id));
-                if (recordIndex !== -1) {
-                    records[recordIndex] = { 
-                        id: parseInt(id), 
-                        name, 
-                        email, 
-                        department, 
-                        status 
-                    };
-                    alert('Record updated successfully!');
-                }
-            } else {
-                // Add new record
-                const newRecord = {
-                    id: nextId++,
-                    name,
-                    email,
-                    department,
-                    status
-                };
-                records.push(newRecord);
-                alert('Record added successfully!');
-            }
-
-            closeModal();
-            renderRecords();
-        });
-
-        // Close modal
-        function closeModal() {
-            document.getElementById('recordModal').style.display = 'none';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('recordModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-
-        // Logout function
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                sessionStorage.removeItem('userRole');
-                window.location.href = 'Login.html';
-            }
-        }
-
-        // Initialize page
-        window.addEventListener('load', function() {
-            console.log('Records page loaded');
-            checkLogin();
-            renderRecords();
-        });
-    </script> -->
+    <div id="dialogModal" class="dialog-modal" role="presentation">
+        <section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogMessage">
+            <h3 id="dialogTitle">Notice</h3>
+            <p id="dialogMessage" class="dialog-message"></p>
+            <div id="dialogInputWrap" class="form-group" hidden>
+                <input id="dialogInput" class="dialog-input" type="text">
+            </div>
+            <div class="dialog-actions">
+                <button id="dialogCancel" class="dialog-cancel" type="button">Cancel</button>
+                <button id="dialogConfirm" class="dialog-confirm" type="button">OK</button>
+            </div>
+        </section>
+    </div>
     <script>
     const API_URL = window.location.protocol === 'file:'
         ? 'http://localhost/Record%20management%20app/api'
@@ -940,10 +629,69 @@
     let currentUserRole = 'employee';
     let records = [];
 
+    function showDialog({ title = 'Notice', message, input = false, value = '', confirmText = 'OK', cancelText = 'Cancel', confirmOnly = false, danger = false }) {
+        const modal = document.getElementById('dialogModal');
+        const inputWrap = document.getElementById('dialogInputWrap');
+        const inputElement = document.getElementById('dialogInput');
+        const cancelButton = document.getElementById('dialogCancel');
+        const confirmButton = document.getElementById('dialogConfirm');
+
+        document.getElementById('dialogTitle').textContent = title;
+        document.getElementById('dialogMessage').textContent = message;
+        inputWrap.hidden = !input;
+        inputElement.value = value;
+        cancelButton.textContent = cancelText;
+        cancelButton.hidden = confirmOnly;
+        confirmButton.textContent = confirmText;
+        confirmButton.classList.toggle('is-danger', danger);
+        modal.classList.add('is-open');
+        if (input) inputElement.focus();
+        else confirmButton.focus();
+
+        return new Promise(resolve => {
+            const finish = result => {
+                modal.classList.remove('is-open');
+                confirmButton.classList.remove('is-danger');
+                confirmButton.removeEventListener('click', onConfirm);
+                cancelButton.removeEventListener('click', onCancel);
+                modal.removeEventListener('click', onBackdrop);
+                document.removeEventListener('keydown', onKeydown);
+                resolve(result);
+            };
+            const onConfirm = () => finish(input ? inputElement.value : true);
+            const onCancel = () => finish(input || !confirmOnly ? null : true);
+            const onBackdrop = event => {
+                if (event.target === modal) finish(null);
+            };
+            const onKeydown = event => {
+                if (event.key === 'Escape') finish(null);
+                if (event.key === 'Enter' && inputElement === document.activeElement) finish(inputElement.value);
+            };
+
+            confirmButton.addEventListener('click', onConfirm);
+            cancelButton.addEventListener('click', onCancel);
+            modal.addEventListener('click', onBackdrop);
+            document.addEventListener('keydown', onKeydown);
+        });
+    }
+
+    function notify(message, title = 'Notice') {
+        return showDialog({ title, message, confirmOnly: true });
+    }
+
+    function ask(message, value = '', title = 'Please enter a value') {
+        return showDialog({ title, message, value, input: true, confirmText: 'Continue' });
+    }
+
+    function confirmAction(message, title = 'Confirm action', danger = false) {
+        return showDialog({ title, message, confirmText: 'Confirm', danger });
+    }
+
     // API HELPER
     async function api(endpoint, options = {}) {
         const res = await fetch(`${API_URL}/${endpoint}`, {
             ...options,
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 ...(options.headers || {})
@@ -975,7 +723,7 @@
             records = data.records.map(r=>({...r,id:Number(r.id)}));
             renderRecords();
         } catch (err) {
-            alert('Failed to load records: ' + err.message);
+            await notify('Failed to load records: ' + err.message, 'Records unavailable');
         }
     }
     // RENDER TABLE
@@ -1055,15 +803,15 @@
     async function submitLeaveRequest(recordId) {
         const dropdown = document.getElementById(`leaveType-${recordId}`);
         const leaveType = dropdown.value;
-        if (!leaveType) return alert('Select a leave type first.');
+        if (!leaveType) return notify('Select a leave type first.', 'Leave request');
 
-        const startDate = prompt('Start date (YYYY-MM-DD):', new Date().toISOString().split('T')[0]);
+        const startDate = await ask('Start date (YYYY-MM-DD):', new Date().toISOString().split('T')[0], 'Leave dates');
         if (!startDate) return;
 
-        const endDate = prompt('End date (YYYY-MM-DD):', startDate);
+        const endDate = await ask('End date (YYYY-MM-DD):', startDate, 'Leave dates');
         if (!endDate) return;
 
-        const reason = prompt('Reason for leave:');
+        const reason = await ask('Reason for leave:', '', 'Leave reason');
         if (!reason) return;
 
         try {
@@ -1071,39 +819,41 @@
                 method: 'POST',
                 body: JSON.stringify({ recordId, type: leaveType, startDate, endDate, reason })
             });
-            alert(' Leave submitted! Status: PENDING');
+            await notify('Leave submitted. Status: PENDING', 'Request submitted');
             loadRecords();
         } catch (err) {
-            alert(' ' + err.message);
+            await notify(err.message, 'Could not submit leave');
         }
     }
     // ADMIN: ACCEPT
     async function acceptLeave(recordId) {
-        const note = prompt('Optional note for approval:', 'Approved.');
+        const note = await ask('Optional note for approval:', 'Approved.', 'Approve leave');
+        if (note === null) return;
         try {
             await api('leave_accept.php', {
                 method: 'POST',
                 body: JSON.stringify({ recordId, note })
             });
-            alert(' Leave approved.');
+            await notify('Leave approved.', 'Request approved');
             loadRecords();
         } catch (err) {
-            alert(' ' + err.message);
+            await notify(err.message, 'Could not approve leave');
         }
     }
     // ADMIN: REJECT
     async function rejectLeave(recordId) {
-        const reason = prompt('Reason for rejection (required):');
-        if (!reason || !reason.trim()) return alert('Reason is required.');
+        const reason = await ask('Reason for rejection (required):', '', 'Reject leave');
+        if (reason === null) return;
+        if (!reason.trim()) return notify('Reason is required.', 'Reject leave');
         try {
             await api('leave_reject.php', {
                 method: 'POST',
                 body: JSON.stringify({ recordId, reason })
             });
-            alert(' Leave rejected.');
+            await notify('Leave rejected.', 'Request rejected');
             loadRecords();
         } catch (err) {
-            alert(' ' + err.message);
+            await notify(err.message, 'Could not reject leave');
         }
     }
 
@@ -1126,7 +876,7 @@
     }
 
     async function deleteRecord(id) {
-        if (!confirm('Delete this record?')) return;
+        if (!await confirmAction('Delete this record? This cannot be undone.', 'Delete record', true)) return;
         await api('delete_record.php', {
             method: 'POST',
             body: JSON.stringify({ id })
@@ -1134,20 +884,25 @@
         loadRecords();
     }
 
-    function viewRecord(id) {
+    async function viewRecord(id) {
         const r = records.find(x => x.id === id);
-        if (r) alert(`Name: ${r.name}\nEmail: ${r.email}\nDept: ${r.department}\nStatus: ${r.status}`);
+        if (r) await notify(`Name: ${r.name}\nEmail: ${r.email}\nDepartment: ${r.department}\nStatus: ${r.status}`, 'Employee record');
     }
     // LOGOUT
-    function logout() {
-        if (!confirm('Logout?')) return;
+    async function logout() {
+        if (!await confirmAction('Are you sure you want to log out?', 'Log out')) return;
+        try {
+            await api('logout.php', { method: 'POST' });
+        } catch (error) {
+            console.error('Logout request failed:', error);
+        }
         sessionStorage.clear();
         window.location.href = 'Login.html';
     }
      //MODAL HELPERS
 function openAddModal() {
     if (currentUserRole !== 'admin') {
-        alert('Only administrators can add records.');
+        notify('Only administrators can add records.', 'Access restricted');
         return;
     }
     document.getElementById('modalTitle').textContent = 'Add New Record';
@@ -1158,7 +913,7 @@ function openAddModal() {
 
 function editRecord(id) {
     if (currentUserRole !== 'admin') {
-        alert('Only administrators can edit records.');
+        notify('Only administrators can edit records.', 'Access restricted');
         return;
     }
     const record = records.find(r => (r.id) === (id));
@@ -1196,9 +951,10 @@ document.getElementById('recordForm').addEventListener('submit', async function(
     const email      = document.getElementById('recordEmail').value.trim();
     const department = document.getElementById('recordDepartment').value.trim();
     const status     = document.getElementById('recordStatus').value;
+    const password   = document.getElementById('recordPassword').value;
 
     if (!name || !email || !department) {
-        alert('Please fill in all fields.');
+        notify('Please fill in all fields.', 'Missing information');
         return;
     }
 
@@ -1207,28 +963,28 @@ document.getElementById('recordForm').addEventListener('submit', async function(
             //  EDIT
             await api('edit_record.php', {
                 method: 'POST',
-                body: JSON.stringify({ id: parseInt(id), name, email, department, status })
+                body: JSON.stringify({ id: parseInt(id), name, email, department, status, password })
             });
-            alert('✅ Record updated successfully!');
+            await notify('Record updated successfully.', 'Changes saved');
         } else {
             //  ADD
             const result = await api('add_record.php', {
                 method: 'POST',
-                body: JSON.stringify({ name, email, department, status })
+                body: JSON.stringify({ name, email, department, status, password })
             });
-            alert('✅ Record added successfully! (ID: ' + result.id + ')');
+            await notify('Record added successfully. ID: ' + result.id, 'Employee added');
         }
         closeModal('recordModal');
         await loadRecords();
     } catch (err) {
-        alert(' ' + err.message);
+        await notify(err.message, 'Could not save record');
     }
 });
 
 // REJECT MODAL
 function rejectLeave(recordId) {
     if (currentUserRole !== 'admin') {
-        alert('Only administrators can reject leave requests.');
+        notify('Only administrators can reject leave requests.', 'Access restricted');
         return;
     }
     document.getElementById('rejectRecordId').value = recordId;
@@ -1243,7 +999,7 @@ document.getElementById('rejectForm').addEventListener('submit', async function(
     const reason   = document.getElementById('rejectReason').value.trim();
 
     if (!reason) {
-        alert('Please provide a reason for rejection.');
+        await notify('Please provide a reason for rejection.', 'Missing reason');
         return;
     }
 
@@ -1253,17 +1009,17 @@ document.getElementById('rejectForm').addEventListener('submit', async function(
             body: JSON.stringify({ recordId, reason })
         });
         closeModal('rejectModal');
-        alert(' Leave rejected.');
+        await notify('Leave rejected.', 'Request rejected');
         await loadRecords();
     } catch (err) {
-        alert(' ' + err.message);
+        await notify(err.message, 'Could not reject leave');
     }
 });
 
 // ACCEPT MODAL
 function acceptLeave(recordId) {
     if (currentUserRole !== 'admin') {
-        alert('Only administrators can accept leave requests.');
+        notify('Only administrators can accept leave requests.', 'Access restricted');
         return;
     }
     document.getElementById('acceptRecordId').value = recordId;
@@ -1283,10 +1039,10 @@ document.getElementById('acceptForm').addEventListener('submit', async function(
             body: JSON.stringify({ recordId, note })
         });
         closeModal('acceptModal');
-        alert(' Leave approved.');
+        await notify('Leave approved.', 'Request approved');
         await loadRecords();
     } catch (err) {
-        alert(' ' + err.message);
+        await notify(err.message, 'Could not approve leave');
     }
 });
     // INIT
